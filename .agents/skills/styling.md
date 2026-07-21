@@ -33,7 +33,7 @@ Defined in `@theme` block, mapped to CSS variables from `CustomStyles.astro`:
 Class-based: add/remove `.dark` on `<html>`. Registered as:
 
 ```css
-@variant dark (&:where(.dark, .dark *));
+@custom-variant dark (&:where(.dark, .dark *));
 ```
 
 Use `dark:` prefix on any utility: `dark:text-slate-300`, `dark:bg-slate-800`.

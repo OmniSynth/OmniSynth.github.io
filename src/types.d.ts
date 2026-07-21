@@ -21,6 +21,11 @@ export interface Post {
   tags?: Taxonomy[];
   author?: string;
 
+  /** Content language for i18n listings and language switcher. */
+  locale?: 'zh' | 'en';
+  /** Shared key linking translations of the same article. */
+  translationKey?: string;
+
   metadata?: MetaData;
 
   draft?: boolean;

@@ -29,7 +29,7 @@ const mergedOg: MetaDataOpenGraph = merge(
     url: canonical,
     siteName: SITE?.name,
     images: [],
-    locale: I18N?.language || 'en',
+    locale: Astro.currentLocale || I18N?.language || 'zh',
     type: 'website',
   },
   METADATA?.openGraph,

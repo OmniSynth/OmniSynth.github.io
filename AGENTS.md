@@ -1,3 +1,25 @@
+## Site
+
+- Production URL: https://omni.irez.cn
+- GitHub Pages repo: https://github.com/OmniSynth/OmniSynth.github.io
+- Site config: `src/config.yaml` (`site`, `base`, brand metadata)
+- Custom domain file: `public/CNAME`
+- Locales: `zh` (default routes) and `en` (`/en/...`). Strings live in `src/i18n/ui.ts`.
+- Browser language: Chinese (`zh*`) opens Chinese by default; other languages open English. Manual switch is saved in `localStorage` (`omni-synth:locale`).
+
+## Content workflow (Obsidian → Astro → GitHub Pages)
+
+1. Open `src/data/post/` as an Obsidian vault (Open folder as vault).
+2. Write `.md` posts with Astro frontmatter (`title`, `publishDate`, etc.). See `.agents/skills/add-blog-post.md`.
+3. Push to `main` on `OmniSynth/OmniSynth.github.io`.
+4. GitHub Actions builds static HTML and deploys Pages (`.github/workflows/deploy.yml`).
+
+Local preview:
+
+```
+npm run dev
+```
+
 ## Development
 
 When starting the dev server, use background mode:

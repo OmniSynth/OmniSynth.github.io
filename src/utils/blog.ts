@@ -54,10 +54,17 @@ const getNormalizedPost = async (post: CollectionEntry<'post'>): Promise<Post> =
     category: rawCategory,
     author,
     draft = false,
+    locale = 'zh',
+    translationKey,
     metadata = {},
   } = data;
 
-  const slug = cleanSlug(id); // cleanSlug(rawSlug.split('/').pop());
+  // Prefer translationKey as the stable public slug; strip locale suffixes from file ids
+  const baseId = (translationKey || id)
+    .replace(/\.(en|zh)$/i, '')
+    .replace(/[.-]en$/i, '')
+    .replace(/[.-]zh$/i, '');
+  const slug = cleanSlug(baseId);
   const publishDate = new Date(rawPublishDate);
   const updateDate = rawUpdateDate ? new Date(rawUpdateDate) : undefined;
 
@@ -73,10 +80,13 @@ const getNormalizedPost = async (post: CollectionEntry<'post'>): Promise<Post> =
     title: tag,
   }));
 
+  const basePermalink = await generatePermalink({ id: baseId, slug, publishDate, category: category?.slug });
+  const permalink = locale === 'en' ? trimSlash(`en/${basePermalink}`) : basePermalink;
+
   return {
     id: id,
     slug: slug,
-    permalink: await generatePermalink({ id, slug, publishDate, category: category?.slug }),
+    permalink,
 
     publishDate: publishDate,
     updateDate: updateDate,
@@ -90,11 +100,12 @@ const getNormalizedPost = async (post: CollectionEntry<'post'>): Promise<Post> =
     author: author,
 
     draft: draft,
+    locale,
+    translationKey,
 
     metadata,
 
     Content: Content,
-    // or 'content' in case you consume from API
 
     readingTime: remarkPluginFrontmatter?.readingTime,
   };
@@ -138,6 +149,36 @@ export const fetchPosts = async (): Promise<Array<Post>> => {
 };
 
 /** */
+export const fetchPostsByLocale = async (locale: 'zh' | 'en' = 'zh'): Promise<Array<Post>> => {
+  const posts = await fetchPosts();
+  return posts.filter((post) => (post.locale || 'zh') === locale);
+};
+
+/** Map of translationKey → { zh, en } permalinks (with leading slash). */
+export const getPostTranslationMap = async (): Promise<Record<string, { zh?: string; en?: string }>> => {
+  const posts = await fetchPosts();
+  const map: Record<string, { zh?: string; en?: string }> = {};
+
+  for (const post of posts) {
+    const key = post.translationKey || post.slug;
+    const locale = post.locale || 'zh';
+    if (!map[key]) map[key] = {};
+    map[key][locale] = `/${trimSlash(post.permalink)}`;
+  }
+
+  return map;
+};
+
+export const findTranslationUrls = async (post: Post): Promise<{ zh?: string; en?: string }> => {
+  if (!post.translationKey) {
+    const locale = post.locale || 'zh';
+    return { [locale]: `/${trimSlash(post.permalink)}` };
+  }
+  const map = await getPostTranslationMap();
+  return map[post.translationKey] || { [post.locale || 'zh']: `/${trimSlash(post.permalink)}` };
+};
+
+/** */
 export const findPostsBySlugs = async (slugs: Array<string>): Promise<Array<Post>> => {
   if (!Array.isArray(slugs)) return [];
 
@@ -176,7 +217,7 @@ export const findLatestPosts = async ({ count }: { count?: number }): Promise<Ar
 /** */
 export const getStaticPathsBlogList = async ({ paginate }: { paginate: PaginateFunction }) => {
   if (!isBlogEnabled || !isBlogListRouteEnabled) return [];
-  return paginate(await fetchPosts(), {
+  return paginate(await fetchPostsByLocale('zh'), {
     params: { blog: BLOG_BASE || undefined },
     pageSize: blogPostsPerPage,
   });
@@ -245,11 +286,11 @@ export const getStaticPathsBlogTag = async ({ paginate }: { paginate: PaginateFu
 
 /** */
 export async function getRelatedPosts(originalPost: Post, maxResults: number = 4): Promise<Post[]> {
-  const allPosts = await fetchPosts();
+  const allPosts = await fetchPostsByLocale(originalPost.locale || 'zh');
   const originalTagsSet = new Set(originalPost.tags ? originalPost.tags.map((tag) => tag.slug) : []);
 
   const postsWithScores = allPosts.reduce((acc: { post: Post; score: number }[], iteratedPost: Post) => {
-    if (iteratedPost.slug === originalPost.slug) return acc;
+    if (iteratedPost.id === originalPost.id || iteratedPost.permalink === originalPost.permalink) return acc;
 
     let score = 0;
     if (iteratedPost.category && originalPost.category && iteratedPost.category.slug === originalPost.category.slug) {

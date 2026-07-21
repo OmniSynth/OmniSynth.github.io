@@ -22,3 +22,12 @@ pnpm-debug.log*
 pnpm-lock.yaml
 
 .astro
+
+# Obsidian (vault root: src/data/post/)
+**/.obsidian/
+**/.obsidian/workspace.json
+**/.obsidian/workspace-mobile.json
+**/.obsidian/cache
+**/.trash/
+
+.cursor/*.log

@@ -1,0 +1,44 @@
+---
+import Features2 from '~/components/widgets/Features2.astro';
+import CallToAction from '~/components/widgets/CallToAction.astro';
+import Hero from '~/components/widgets/Hero.astro';
+import { useTranslations, type Locale } from '~/i18n/ui';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+---
+
+<Hero tagline={t('products.tag')}>
+  <Fragment slot="title">{t('products.title')}</Fragment>
+  <Fragment slot="subtitle">{t('products.subtitle')}</Fragment>
+</Hero>
+
+<Features2
+  columns={3}
+  items={[
+    { title: t('products.p1Title'), description: t('products.p1Desc'), icon: 'tabler:layout-board' },
+    { title: t('products.p2Title'), description: t('products.p2Desc'), icon: 'tabler:brain' },
+    { title: t('products.p3Title'), description: t('products.p3Desc'), icon: 'tabler:chart-candle' },
+    { title: t('products.p4Title'), description: t('products.p4Desc'), icon: 'tabler:language' },
+    { title: t('products.p5Title'), description: t('products.p5Desc'), icon: 'tabler:puzzle' },
+    { title: t('products.p6Title'), description: t('products.p6Desc'), icon: 'tabler:brand-github' },
+  ]}
+/>
+
+<CallToAction
+  actions={[
+    {
+      variant: 'primary',
+      text: t('products.ctaButton'),
+      href: 'https://github.com/OmniSynth',
+      target: '_blank',
+      icon: 'tabler:brand-github',
+    },
+  ]}
+>
+  <Fragment slot="title">{t('products.ctaTitle')}</Fragment>
+</CallToAction>

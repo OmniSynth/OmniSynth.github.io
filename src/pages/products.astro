@@ -1,13 +1,13 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
-import ContactContent from '~/components/pages/ContactContent.astro';
+import ProductsContent from '~/components/pages/ProductsContent.astro';
 import { useTranslations } from '~/i18n/ui';
 
 const locale = 'zh' as const;
 const t = useTranslations(locale);
-const metadata = { title: t('meta.contactTitle'), description: t('meta.homeDescription') };
+const metadata = { title: t('meta.productsTitle'), description: t('meta.homeDescription') };
 ---
 
 <Layout metadata={metadata}>
-  <ContactContent locale={locale} />
+  <ProductsContent locale={locale} />
 </Layout>

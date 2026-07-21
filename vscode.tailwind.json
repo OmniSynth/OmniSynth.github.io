@@ -3,15 +3,47 @@
   "atDirectives": [
     {
       "name": "@tailwind",
-      "description": "@tailwind tailwindcss"
+      "description": "Use the `@tailwind` directive to insert Tailwind's `base`, `components`, `utilities` and `screens` styles into your CSS (v3)."
     },
     {
       "name": "@layer",
-      "description": "@layer tailwindcss"
+      "description": "Use the `@layer` directive to tell Tailwind which \"bucket\" a set of custom styles belong to."
     },
     {
       "name": "@apply",
-      "description": "@apply tailwindcss"
+      "description": "Use `@apply` to inline any existing utility classes into your own custom CSS."
+    },
+    {
+      "name": "@config",
+      "description": "Use `@config` to load a legacy JavaScript config file (Tailwind CSS v4)."
+    },
+    {
+      "name": "@plugin",
+      "description": "Use `@plugin` to load a Tailwind CSS plugin (Tailwind CSS v4)."
+    },
+    {
+      "name": "@theme",
+      "description": "Use `@theme` to define design tokens that become CSS variables and utilities (Tailwind CSS v4)."
+    },
+    {
+      "name": "@utility",
+      "description": "Use `@utility` to define a custom utility class (Tailwind CSS v4)."
+    },
+    {
+      "name": "@variant",
+      "description": "Deprecated. Use `@custom-variant` to define custom variants (Tailwind CSS v4)."
+    },
+    {
+      "name": "@custom-variant",
+      "description": "Use `@custom-variant` to define a custom variant (Tailwind CSS v4)."
+    },
+    {
+      "name": "@source",
+      "description": "Use `@source` to explicitly register source files for class detection (Tailwind CSS v4)."
+    },
+    {
+      "name": "@reference",
+      "description": "Use `@reference` to import theme variables without duplicating CSS (Tailwind CSS v4)."
     }
   ]
 }

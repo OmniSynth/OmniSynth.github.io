@@ -1,0 +1,63 @@
+---
+/**
+ * Keep announcement dismiss state consistent across View Transitions.
+ * localStorage key: omni-synth:announcement-dismissed
+ */
+---
+
+<script is:inline>
+  (function () {
+    var STORAGE_KEY = 'omni-synth:announcement-dismissed';
+
+    function isDismissed() {
+      try {
+        return localStorage.getItem(STORAGE_KEY) === '1';
+      } catch (e) {
+        return false;
+      }
+    }
+
+    function applyAnnouncementState() {
+      if (!isDismissed()) return;
+      document.documentElement.classList.add('announcement-dismissed');
+      document.querySelectorAll('[data-announcement], #announcement-bar').forEach(function (bar) {
+        bar.remove();
+      });
+    }
+
+    function bindClose() {
+      var btn = document.querySelector('[data-announcement-close]');
+      if (!btn || btn.getAttribute('data-bound') === '1') return;
+      btn.setAttribute('data-bound', '1');
+      btn.addEventListener('click', function () {
+        try {
+          localStorage.setItem(STORAGE_KEY, '1');
+        } catch (e) {
+          /* ignore */
+        }
+        document.documentElement.classList.add('announcement-dismissed');
+        document.querySelectorAll('[data-announcement], #announcement-bar').forEach(function (bar) {
+          bar.remove();
+        });
+      });
+    }
+
+    function sync() {
+      applyAnnouncementState();
+      bindClose();
+    }
+
+    if (isDismissed()) {
+      document.documentElement.classList.add('announcement-dismissed');
+    }
+
+    sync();
+
+    if (!window.__omniAnnouncementStateBound) {
+      window.__omniAnnouncementStateBound = true;
+      document.addEventListener('DOMContentLoaded', sync);
+      document.addEventListener('astro:page-load', sync);
+      document.addEventListener('astro:after-swap', sync);
+    }
+  })();
+</script>

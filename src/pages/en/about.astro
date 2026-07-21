@@ -3,7 +3,7 @@ import Layout from '~/layouts/PageLayout.astro';
 import AboutContent from '~/components/pages/AboutContent.astro';
 import { useTranslations } from '~/i18n/ui';
 
-const locale = 'zh' as const;
+const locale = 'en' as const;
 const t = useTranslations(locale);
 const metadata = { title: t('meta.aboutTitle'), description: t('meta.homeDescription') };
 ---

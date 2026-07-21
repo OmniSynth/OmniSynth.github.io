@@ -1,23 +1,25 @@
 ---
-import type { InferGetStaticPropsType, GetStaticPaths } from 'astro';
+import type { GetStaticPaths, InferGetStaticPropsType, PaginateFunction } from 'astro';
 
 import Layout from '~/layouts/PageLayout.astro';
 import BlogListPage from '~/components/blog/BlogListPage.astro';
 
-import { blogListRobots, getStaticPathsBlogList } from '~/utils/blog';
+import { blogListRobots, blogPostsPerPage, fetchPostsByLocale, isBlogEnabled, isBlogListRouteEnabled } from '~/utils/blog';
 import { useTranslations } from '~/i18n/ui';
 
 export const prerender = true;
 
-export const getStaticPaths = (async ({ paginate }) => {
-  return await getStaticPathsBlogList({ paginate });
+export const getStaticPaths = (async ({ paginate }: { paginate: PaginateFunction }) => {
+  if (!isBlogEnabled || !isBlogListRouteEnabled) return [];
+  return paginate(await fetchPostsByLocale('en'), {
+    pageSize: blogPostsPerPage,
+  });
 }) satisfies GetStaticPaths;
 
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
-
 const { page } = Astro.props as Props;
 const currentPage = page.currentPage ?? 1;
-const locale = 'zh' as const;
+const locale = 'en' as const;
 const t = useTranslations(locale);
 
 const title =

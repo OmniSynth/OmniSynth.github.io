@@ -1,0 +1,13 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import ProductsContent from '~/components/pages/ProductsContent.astro';
+import { useTranslations } from '~/i18n/ui';
+
+const locale = 'en' as const;
+const t = useTranslations(locale);
+const metadata = { title: t('meta.productsTitle'), description: t('meta.homeDescription') };
+---
+
+<Layout metadata={metadata}>
+  <ProductsContent locale={locale} />
+</Layout>

@@ -1,0 +1,50 @@
+---
+import HeroText from '~/components/widgets/HeroText.astro';
+import Features2 from '~/components/widgets/Features2.astro';
+import { useTranslations, type Locale } from '~/i18n/ui';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+---
+
+<HeroText tagline={t('contact.tag')} title={t('contact.title')} subtitle={t('contact.subtitle')} />
+
+<Features2
+  columns={3}
+  items={[
+    {
+      title: 'OmniSynth',
+      description: t('contact.org'),
+      icon: 'tabler:brand-github',
+      callToAction: { text: 'GitHub', href: 'https://github.com/OmniSynth', target: '_blank' },
+    },
+    {
+      title: t('home.founderName'),
+      description: t('contact.founder'),
+      icon: 'tabler:user-star',
+      callToAction: { text: t('home.founderContact'), href: `mailto:${t('home.founderContact')}` },
+    },
+    {
+      title: t('home.techName'),
+      description: t('contact.tech'),
+      icon: 'tabler:user-cog',
+      callToAction: { text: 'GitHub', href: 'https://github.com/lyalexzz', target: '_blank' },
+    },
+  ]}
+/>
+
+<div class="max-w-5xl mx-auto px-4 sm:px-6 pb-20 flex flex-col sm:flex-row gap-4 justify-center items-center">
+  <a class="btn btn-primary" href="https://github.com/OmniSynth" target="_blank" rel="noopener noreferrer">
+    https://github.com/OmniSynth
+  </a>
+  <a class="btn btn-secondary" href={`mailto:${t('home.founderContact')}`}>
+    {t('home.founderContact')}
+  </a>
+  <a class="btn btn-secondary" href="https://github.com/lyalexzz" target="_blank" rel="noopener noreferrer">
+    https://github.com/lyalexzz
+  </a>
+</div>

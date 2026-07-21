@@ -1,0 +1,180 @@
+---
+/**
+ * Client-side locale bootstrap for static hosting:
+ * - zh* browser languages → Chinese (default routes)
+ * - otherwise → English (/en/...)
+ * Manual picker choice is stored and wins over browser detection.
+ * Language switch preserves the current page route whenever possible.
+ */
+---
+
+<script is:inline>
+  (function () {
+    var STORAGE_KEY = 'omni-synth:locale';
+    var LOCALIZED = {
+      '/': true,
+      '/about': true,
+      '/products': true,
+      '/contact': true,
+      '/blog': true,
+    };
+
+    function normalizePath(pathname) {
+      if (!pathname) return '/';
+      var p = pathname.replace(/\/+$/, '');
+      return p === '' ? '/' : p;
+    }
+
+    function currentLocale(pathname) {
+      return pathname === '/en' || pathname.indexOf('/en/') === 0 ? 'en' : 'zh';
+    }
+
+    function stripLocale(pathname) {
+      var p = normalizePath(pathname);
+      if (p === '/en') return '/';
+      if (p.indexOf('/en/') === 0) {
+        var rest = p.slice(3);
+        return rest === '' ? '/' : rest;
+      }
+      return p;
+    }
+
+    function localizePath(basePath, locale) {
+      var base = normalizePath(basePath);
+      if (locale === 'zh') return base;
+      if (base === '/') return '/en';
+      return '/en' + base;
+    }
+
+    function isOnMappedPost(map, pathname) {
+      if (!map) return false;
+      var here = normalizePath(pathname);
+      for (var key in map) {
+        if (Object.prototype.hasOwnProperty.call(map, key) && normalizePath(map[key]) === here) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    function switchLocalePath(pathname, targetLocale) {
+      var raw = stripLocale(pathname);
+
+      // Translated blog posts: only while currently viewing a mapped post URL
+      if (
+        window.__omniPostI18n &&
+        window.__omniPostI18n[targetLocale] &&
+        isOnMappedPost(window.__omniPostI18n, pathname)
+      ) {
+        return window.__omniPostI18n[targetLocale];
+      }
+
+      if (LOCALIZED[raw]) return localizePath(raw, targetLocale);
+
+      if (raw.indexOf('/blog/') === 0) {
+        var page = raw.slice('/blog/'.length);
+        var blogRoot = localizePath('/blog', targetLocale);
+        if (page && /^\d+$/.test(page) && page !== '1') return blogRoot + '/' + page;
+        return blogRoot;
+      }
+
+      // Shared non-translated routes: keep current content URL
+      return raw;
+    }
+
+    function browserLocale() {
+      var list = [];
+      if (navigator.languages && navigator.languages.length) {
+        list = navigator.languages;
+      } else if (navigator.language) {
+        list = [navigator.language];
+      }
+      for (var i = 0; i < list.length; i++) {
+        var lang = String(list[i] || '').toLowerCase();
+        if (lang.indexOf('zh') === 0) return 'zh';
+      }
+      return 'en';
+    }
+
+    function preferredLocale() {
+      try {
+        var saved = localStorage.getItem(STORAGE_KEY);
+        if (saved === 'zh' || saved === 'en') return saved;
+      } catch (e) {
+        /* ignore */
+      }
+      return browserLocale();
+    }
+
+    function rememberLocale(locale) {
+      try {
+        localStorage.setItem(STORAGE_KEY, locale);
+      } catch (e) {
+        /* ignore */
+      }
+    }
+
+    function navigateToLocale(targetLocale) {
+      var pathname = window.location.pathname || '/';
+      var target = switchLocalePath(pathname, targetLocale);
+      if (!target) return;
+      var next = target + window.location.search + window.location.hash;
+      var here = pathname + window.location.search + window.location.hash;
+      if (next !== here) {
+        window.location.assign(next);
+      }
+    }
+
+    var pathname = window.location.pathname || '/';
+    var preferred = preferredLocale();
+    rememberLocale(preferred);
+
+    function syncPostLocale() {
+      var map = window.__omniPostI18n;
+      var here = normalizePath(window.location.pathname || '/');
+      var pref = preferredLocale();
+      var onPost = isOnMappedPost(map, here);
+      var target = onPost && map ? map[pref] : null;
+      if (!map) return;
+      // Stale map after View Transitions: never yank users back onto a post
+      if (!onPost) {
+        window.__omniPostI18n = null;
+        return;
+      }
+      if (!target) return;
+      var nextPath = normalizePath(target);
+      if (nextPath !== here) {
+        window.location.replace(target + window.location.search + window.location.hash);
+      }
+    }
+
+    var current = currentLocale(pathname);
+    var stripped = stripLocale(pathname);
+    var isLocalizedRoute = !!LOCALIZED[stripped] || stripped.indexOf('/blog/') === 0;
+
+    // Only auto-redirect on bilingual routes; never kick shared routes to home
+    if (preferred !== current && isLocalizedRoute) {
+      var target = switchLocalePath(pathname, preferred);
+      var next = target + window.location.search + window.location.hash;
+      var here = pathname + window.location.search + window.location.hash;
+      if (next !== here) {
+        window.location.replace(next);
+        return;
+      }
+    }
+
+    // Translated posts: jump to the preferred language version when available
+    syncPostLocale();
+    document.addEventListener('DOMContentLoaded', syncPostLocale);
+    document.addEventListener('astro:page-load', syncPostLocale);
+    document.addEventListener('astro:after-swap', syncPostLocale);
+
+    window.__omniLocale = {
+      storageKey: STORAGE_KEY,
+      remember: rememberLocale,
+      switchPath: switchLocalePath,
+      navigateToLocale: navigateToLocale,
+      preferred: preferredLocale,
+    };
+  })();
+</script>

@@ -1,0 +1,148 @@
+---
+import Hero from '~/components/widgets/Hero.astro';
+import Note from '~/components/widgets/Note.astro';
+import Features from '~/components/widgets/Features.astro';
+import Features2 from '~/components/widgets/Features2.astro';
+import Steps from '~/components/widgets/Steps.astro';
+import Content from '~/components/widgets/Content.astro';
+import FAQs from '~/components/widgets/FAQs.astro';
+import CallToAction from '~/components/widgets/CallToAction.astro';
+import { localizePath, useTranslations, type Locale } from '~/i18n/ui';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+---
+
+<Hero
+  actions={[
+    {
+      variant: 'primary',
+      text: t('home.ctaGithub'),
+      href: 'https://github.com/OmniSynth',
+      target: '_blank',
+      icon: 'tabler:brand-github',
+    },
+    { text: t('home.ctaProducts'), href: localizePath('/products', locale) },
+  ]}
+  image={{ src: '~/assets/images/hero-image.png', alt: 'Omni Synth' }}
+>
+  <Fragment slot="title">
+    {t('home.heroTitleBefore')}{' '}
+    <span class="text-accent dark:text-white">{t('home.heroTitleAccent')}</span>
+    {' '}{t('home.heroTitleAfter')}
+  </Fragment>
+  <Fragment slot="subtitle">{t('home.heroSubtitle')}</Fragment>
+</Hero>
+
+<Note title={t('home.noteTitle')} description={t('home.noteDesc')} />
+
+<Features
+  id="features"
+  tagline={t('home.featuresTag')}
+  title={t('home.featuresTitle')}
+  subtitle={t('home.featuresSubtitle')}
+  items={[
+    { title: t('home.f1Title'), description: t('home.f1Desc'), icon: 'tabler:vector-bezier' },
+    { title: t('home.f2Title'), description: t('home.f2Desc'), icon: 'tabler:brain' },
+    { title: t('home.f3Title'), description: t('home.f3Desc'), icon: 'tabler:circle-check' },
+    { title: t('home.f4Title'), description: t('home.f4Desc'), icon: 'tabler:chart-candle' },
+    { title: t('home.f5Title'), description: t('home.f5Desc'), icon: 'tabler:apps' },
+    { title: t('home.f6Title'), description: t('home.f6Desc'), icon: 'tabler:brand-github' },
+  ]}
+/>
+
+<Content
+  isReversed
+  tagline={t('home.focusTag')}
+  title={t('home.focusTitle')}
+  items={[
+    { title: t('home.focus1Title'), description: t('home.focus1Desc') },
+    { title: t('home.focus2Title'), description: t('home.focus2Desc') },
+  ]}
+  image={{
+    src: 'https://images.unsplash.com/photo-1555949963-aa79dcee981c?auto=format&fit=crop&w=2070&q=80',
+    alt: 'AI coding workspace',
+  }}
+/>
+
+<Steps
+  tagline={t('home.stepsTag')}
+  title={t('home.stepsTitle')}
+  items={[
+    {
+      title: t('home.step1Title'),
+      description: t('home.step1Desc'),
+      icon: 'tabler:file-description',
+    },
+    {
+      title: t('home.step2Title'),
+      description: t('home.step2Desc'),
+      icon: 'tabler:code',
+    },
+    {
+      title: t('home.step3Title'),
+      description: t('home.step3Desc'),
+      icon: 'tabler:api',
+    },
+    {
+      title: t('home.step4Title'),
+      description: t('home.step4Desc'),
+      icon: 'tabler:package',
+    },
+  ]}
+  image={{
+    src: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=2070&q=80',
+    alt: 'Technology roadmap',
+  }}
+/>
+
+<Features2
+  tagline={t('home.teamTag')}
+  title={t('home.teamTitle')}
+  subtitle={t('home.teamSubtitle')}
+  columns={2}
+  items={[
+    {
+      title: t('home.founderName'),
+      description: t('home.founderRole'),
+      icon: 'tabler:user-star',
+      callToAction: { text: t('home.founderContact'), href: `mailto:${t('home.founderContact')}` },
+    },
+    {
+      title: t('home.techName'),
+      description: t('home.techRole'),
+      icon: 'tabler:user-cog',
+      callToAction: { text: 'GitHub', href: 'https://github.com/lyalexzz', target: '_blank' },
+    },
+  ]}
+/>
+
+<FAQs
+  tagline={t('home.faqTag')}
+  title={t('home.faqTitle')}
+  items={[
+    { title: t('home.faq1Q'), description: t('home.faq1A') },
+    { title: t('home.faq2Q'), description: t('home.faq2A') },
+    { title: t('home.faq3Q'), description: t('home.faq3A') },
+    { title: t('home.faq4Q'), description: t('home.faq4A') },
+  ]}
+/>
+
+<CallToAction
+  actions={[
+    {
+      variant: 'primary',
+      text: t('home.ctaButton'),
+      href: 'https://github.com/OmniSynth',
+      target: '_blank',
+      icon: 'tabler:brand-github',
+    },
+  ]}
+>
+  <Fragment slot="title">{t('home.ctaTitle')}</Fragment>
+  <Fragment slot="subtitle">{t('home.ctaSubtitle')}</Fragment>
+</CallToAction>

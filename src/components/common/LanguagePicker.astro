@@ -1,0 +1,76 @@
+---
+import { localeLabels, locales, type Locale } from '~/i18n/ui';
+import { switchLocalePath } from '~/i18n/ui';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const path = Astro.url.pathname;
+---
+
+<div class="flex items-center gap-1 text-sm font-medium" role="group" aria-label="Language">
+  {
+    locales.map((code) => {
+      const href = switchLocalePath(path, code);
+      const active = code === locale;
+      return (
+        <a
+          href={href}
+          data-locale-switch={code}
+          class:list={[
+            'px-2 py-1 rounded-md transition-colors',
+            active
+              ? 'bg-primary text-white'
+              : 'text-muted hover:text-default hover:bg-gray-100 dark:hover:bg-gray-700',
+          ]}
+          aria-current={active ? 'page' : undefined}
+          lang={code}
+        >
+          {localeLabels[code]}
+        </a>
+      );
+    })
+  }
+</div>
+
+<script is:inline>
+  function bindLocaleSwitch() {
+    document.querySelectorAll('[data-locale-switch]').forEach(function (el) {
+      if (el.dataset.bound === '1') return;
+      el.dataset.bound = '1';
+      el.addEventListener('click', function (event) {
+        var code = el.getAttribute('data-locale-switch');
+        if (code !== 'zh' && code !== 'en') return;
+
+        try {
+          localStorage.setItem('omni-synth:locale', code);
+        } catch (e) {
+          /* ignore */
+        }
+
+        if (window.__omniLocale) {
+          if (typeof window.__omniLocale.remember === 'function') {
+            window.__omniLocale.remember(code);
+          }
+          // Always compute from the live URL so View Transitions can't stale the href
+          if (typeof window.__omniLocale.switchPath === 'function') {
+            event.preventDefault();
+            var target = window.__omniLocale.switchPath(window.location.pathname || '/', code);
+            var next = target + window.location.search + window.location.hash;
+            var here = window.location.pathname + window.location.search + window.location.hash;
+            if (next !== here) {
+              window.location.assign(next);
+            }
+            return;
+          }
+        }
+      });
+    });
+  }
+
+  bindLocaleSwitch();
+  document.addEventListener('astro:after-swap', bindLocaleSwitch);
+  document.addEventListener('astro:page-load', bindLocaleSwitch);
+</script>

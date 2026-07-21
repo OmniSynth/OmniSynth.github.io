@@ -1,0 +1,68 @@
+---
+import Hero from '~/components/widgets/Hero.astro';
+import Features2 from '~/components/widgets/Features2.astro';
+import Features3 from '~/components/widgets/Features3.astro';
+import Stats from '~/components/widgets/Stats.astro';
+import { useTranslations, type Locale } from '~/i18n/ui';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+---
+
+<Hero tagline={t('about.tag')}>
+  <Fragment slot="title">{t('about.title')}</Fragment>
+  <Fragment slot="subtitle">{t('about.subtitle')}</Fragment>
+</Hero>
+
+<Stats
+  stats={[
+    { title: t('about.statsOpenSource'), amount: 'GitHub' },
+    { title: t('about.statsDelivery'), amount: t('about.statsDeliveryValue') },
+    { title: t('about.statsFocus'), amount: '2' },
+  ]}
+/>
+
+<Features3
+  title={t('about.missionTitle')}
+  subtitle={t('about.missionSubtitle')}
+  columns={3}
+  items={[
+    { title: t('about.m1Title'), description: t('about.m1Desc'), icon: 'tabler:vector-bezier' },
+    { title: t('about.m2Title'), description: t('about.m2Desc'), icon: 'tabler:robot' },
+    { title: t('about.m3Title'), description: t('about.m3Desc'), icon: 'tabler:world' },
+  ]}
+/>
+
+<Features2
+  title={t('about.peopleTitle')}
+  subtitle={t('about.peopleSubtitle')}
+  columns={2}
+  items={[
+    {
+      title: t('home.founderName'),
+      description: t('home.founderRole'),
+      icon: 'tabler:user-star',
+      callToAction: { text: t('home.founderContact'), href: `mailto:${t('home.founderContact')}` },
+    },
+    {
+      title: t('home.techName'),
+      description: t('home.techRole'),
+      icon: 'tabler:user-cog',
+      callToAction: { text: 'GitHub', href: 'https://github.com/lyalexzz', target: '_blank' },
+    },
+  ]}
+/>
+
+<div class="max-w-5xl mx-auto px-4 sm:px-6 pb-16 flex flex-wrap gap-4 justify-center">
+  <a class="btn btn-primary" href="https://github.com/OmniSynth" target="_blank" rel="noopener noreferrer">
+    github.com/OmniSynth
+  </a>
+  <a class="btn btn-secondary" href={`mailto:${t('home.founderContact')}`}>{t('home.founderContact')}</a>
+  <a class="btn btn-secondary" href="https://github.com/lyalexzz" target="_blank" rel="noopener noreferrer">
+    github.com/lyalexzz
+  </a>
+</div>

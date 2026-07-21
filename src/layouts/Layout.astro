@@ -2,6 +2,7 @@
 import '~/assets/styles/tailwind.css';
 
 import { I18N } from 'astrowind:config';
+import { defaultLocale } from '~/i18n/ui';
 
 import CommonMeta from '~/components/common/CommonMeta.astro';
 import Favicons from '~/components/Favicons.astro';
@@ -11,6 +12,8 @@ import Metadata from '~/components/common/Metadata.astro';
 import SiteVerification from '~/components/common/SiteVerification.astro';
 import Analytics from '~/components/common/Analytics.astro';
 import BasicScripts from '~/components/common/BasicScripts.astro';
+import LocaleDetect from '~/components/common/LocaleDetect.astro';
+import AnnouncementState from '~/components/common/AnnouncementState.astro';
 
 // Comment the line below to disable View Transitions
 import { ClientRouter } from 'astro:transitions';
@@ -19,15 +22,23 @@ import type { MetaData as MetaDataType } from '~/types';
 
 export interface Props {
   metadata?: MetaDataType;
+  /** Blog post translation URLs: { zh?: string; en?: string } */
+  postI18n?: { zh?: string; en?: string } | null;
 }
 
-const { metadata = {} } = Astro.props;
-const { language, textDirection } = I18N;
+const { metadata = {}, postI18n = null } = Astro.props;
+const language = Astro.currentLocale || I18N?.language || defaultLocale;
+const textDirection = I18N?.textDirection || 'ltr';
 ---
 
 <!doctype html>
 <html lang={language} dir={textDirection} class="2xl:text-[20px]">
   <head>
+    <script is:inline define:vars={{ postI18n }}>
+      window.__omniPostI18n = postI18n || null;
+    </script>
+    <LocaleDetect />
+    <AnnouncementState />
     <CommonMeta />
     <Favicons />
     <CustomStyles />

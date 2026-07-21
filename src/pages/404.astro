@@ -1,8 +1,9 @@
 ---
 import Layout from '~/layouts/Layout.astro';
-import { getHomePermalink } from '~/utils/permalinks';
+import { defaultLocale, localizePath, type Locale } from '~/i18n/ui';
 
 const title = `Error 404`;
+const locale = (Astro.currentLocale as Locale | undefined) || defaultLocale;
 ---
 
 <Layout metadata={{ title }}>
@@ -13,11 +14,11 @@ const title = `Error 404`;
           <span class="sr-only">Error</span>
           <span class="text-primary">404</span>
         </h2>
-        <p class="text-3xl font-semibold md:text-3xl">Sorry, we couldn't find this page.</p>
+        <p class="text-3xl font-semibold md:text-3xl">页面不存在 / Page not found</p>
         <p class="mt-4 mb-8 text-lg text-muted dark:text-slate-400">
-          But don't worry, you can find plenty of other things on our homepage.
+          回到首页继续了解 Omni Synth / Return home to continue with Omni Synth.
         </p>
-        <a rel="noopener noreferrer" href={getHomePermalink()} class="btn ml-4">Back to homepage</a>
+        <a rel="noopener noreferrer" href={localizePath('/', locale)} class="btn ml-4">首页 / Home</a>
       </div>
     </div>
   </section>

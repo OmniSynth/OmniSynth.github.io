@@ -2,7 +2,8 @@
 import PageLayout from '~/layouts/PageLayout.astro';
 import Header from '~/components/widgets/Header.astro';
 
-import { headerData } from '~/navigation';
+import { getHeaderData } from '~/navigation';
+import { defaultLocale, type Locale } from '~/i18n/ui';
 import type { MetaData } from '~/types';
 
 export interface Props {
@@ -10,6 +11,8 @@ export interface Props {
 }
 
 const { metadata } = Astro.props;
+const locale = (Astro.currentLocale as Locale | undefined) || defaultLocale;
+const headerData = getHeaderData(locale);
 ---
 
 <PageLayout metadata={metadata}>
@@ -19,13 +22,9 @@ const { metadata } = Astro.props;
   <Fragment slot="header">
     <slot name="header">
       <Header
-        links={headerData?.links[2] ? [headerData.links[2]] : undefined}
-        actions={[
-          {
-            text: 'Download',
-            href: 'https://github.com/arthelokyo/astrowind',
-          },
-        ]}
+        links={headerData.links}
+        actions={headerData.actions}
+        locale={locale}
         showToggleTheme
         position="right"
       />
