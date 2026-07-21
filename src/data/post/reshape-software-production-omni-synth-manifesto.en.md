@@ -85,7 +85,7 @@ A grand vision without touchable artifacts is just talk. So we walk on two legs:
 ## Who is driving this
 
 **Leon** — product designer, advocate of radical simplicity.  
-He believes less is more: disciplined design that turns complex ideas into clear, usable products. Complexity should not be performed; it should be digested. Contact: irez@qq.com
+He believes less is more: disciplined design that turns complex ideas into clear, usable products. Complexity should not be performed; it should be digested. GitHub: [ilkm](https://github.com/ilkm)
 
 **Moonchild** — a genuine technical force.  
 Fluent across architectures, engineering-obsessive. Complex systems are his home field; the harder the fight, the sharper he gets. Without people like him, vision stays in slides. With him, vision gets a spine.

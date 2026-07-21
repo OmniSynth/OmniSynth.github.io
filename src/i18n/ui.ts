@@ -88,7 +88,7 @@ const ui = {
     'home.founderName': 'Leon',
     'home.founderRole':
       '产品设计师 · 极致简洁的拥护者。相信少即是多，用克制的设计把复杂想法收成清晰可用的产品。',
-    'home.founderContact': 'irez@qq.com',
+    'home.founderContact': 'GitHub',
     'home.techName': 'Moonchild',
     'home.techRole':
       '技术大佬，真正那种。通吃各类架构，工程狂热者——复杂系统是他的主场，硬仗打得越多越兴奋。',
@@ -148,11 +148,11 @@ const ui = {
 
     'contact.tag': '联系',
     'contact.title': '通过 GitHub 与我们联系',
-    'contact.subtitle': '组织、成员都在这里。欢迎 Star、Issue，或直接邮件联系设计侧。',
+    'contact.subtitle': '组织、成员都在这里。欢迎 Star、Issue，或通过 GitHub 联系成员。',
     'contact.org':
       '重塑程序生产方式；量化平权——让每个人都能用上真正可用的量化。',
     'contact.founder':
-      '产品设计师 · 极致简洁拥护者 · irez@qq.com',
+      '产品设计师 · 极致简洁拥护者 · github.com/ilkm',
     'contact.tech': '技术大佬 · 架构全能 · 技术狂人',
   },
   en: {
@@ -242,7 +242,7 @@ const ui = {
     'home.founderName': 'Leon',
     'home.founderRole':
       'Product designer. Advocate of radical simplicity—cutting complexity until the product feels inevitable.',
-    'home.founderContact': 'irez@qq.com',
+    'home.founderContact': 'GitHub',
     'home.techName': 'Moonchild',
     'home.techRole':
       'A genuine technical force. Fluent across architectures, engineering obsessive—thrives on hard systems and harder problems.',
@@ -307,10 +307,10 @@ const ui = {
 
     'contact.tag': 'Contact',
     'contact.title': 'Reach us on GitHub',
-    'contact.subtitle': 'Org and members are here. Stars and issues welcome—or email design directly.',
+    'contact.subtitle': 'Org and members are here. Stars and issues welcome—or reach members on GitHub.',
     'contact.org':
       'Rewriting how software is made. Quant democratized—powerful quant tools everyone can use.',
-    'contact.founder': 'Product designer · Radical simplicity · irez@qq.com',
+    'contact.founder': 'Product designer · Radical simplicity · github.com/ilkm',
     'contact.tech': 'Technical force · Architecture polyglot · Engineering obsessive',
   },
 } as const;

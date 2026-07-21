@@ -45,7 +45,7 @@ export function getFooterData(locale: Locale) {
       {
         title: t('footer.team'),
         links: [
-          { text: 'Leon', href: 'mailto:irez@qq.com' },
+          { text: 'Leon', href: 'https://github.com/ilkm' },
           { text: 'Moonchild', href: 'https://github.com/lyalexzz' },
         ],
       },

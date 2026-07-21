@@ -26,7 +26,7 @@ const t = useTranslations(locale);
       title: t('home.founderName'),
       description: t('contact.founder'),
       icon: 'tabler:user-star',
-      callToAction: { text: t('home.founderContact'), href: `mailto:${t('home.founderContact')}` },
+      callToAction: { text: 'GitHub', href: 'https://github.com/ilkm', target: '_blank' },
     },
     {
       title: t('home.techName'),
@@ -41,8 +41,8 @@ const t = useTranslations(locale);
   <a class="btn btn-primary" href="https://github.com/OmniSynth" target="_blank" rel="noopener noreferrer">
     https://github.com/OmniSynth
   </a>
-  <a class="btn btn-secondary" href={`mailto:${t('home.founderContact')}`}>
-    {t('home.founderContact')}
+  <a class="btn btn-secondary" href="https://github.com/ilkm" target="_blank" rel="noopener noreferrer">
+    https://github.com/ilkm
   </a>
   <a class="btn btn-secondary" href="https://github.com/lyalexzz" target="_blank" rel="noopener noreferrer">
     https://github.com/lyalexzz
